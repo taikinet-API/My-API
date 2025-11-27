@@ -1,7 +1,8 @@
 // controllers/messageController.js
+// messages/
 const Message = require("../models/Message");
 
-exports.getMessagesByRoom = async (req, res) => {
+exports.getMessagesByRoom = async (req, res) => { 
   try {
     const roomId = req.params.roomId;
     const rows = await Message.findByRoomId(roomId);
