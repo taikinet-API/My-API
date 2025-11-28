@@ -1,5 +1,5 @@
 // controllers/authController.js
-const User = require("../models/User");
+const User = require("../models/Users");
 
 exports.login = async (req, res) => {
   try {
@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     const user = await User.createUser(username, password);      // ユーザー作成メソッドを呼び出す
 
     res.json({ message: "ユーザー登録成功" , userId: user.id, username: user.username});    // 登録成功時のレスポンス
-    
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "server error" });
