@@ -6,7 +6,15 @@ module.exports = {
     // 指定されたチャットルームIDのメッセージを取得する
   async findByRoomId(roomId) {
     const [rows] = await pool.query(
-      "SELECT * FROM messages WHERE room_id = ? ORDER BY created_at ASC",
+      `SELECT 
+        m.id,
+        u.username AS user,
+        m.text,
+        m.created_at
+        FROM messages m
+        JOIN users u ON m.user_id = u.id
+        WHERE m.room_id = ?
+        ORDER BY m.created_at ASC`,
       [roomId]
     );
     return rows;
