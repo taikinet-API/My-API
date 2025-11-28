@@ -1,7 +1,7 @@
 // controllers/messageController.js
 // messages/
 const Message = require("../models/Messages");
-const { broadcastMessageUpdate } = require("../app");   // ← 追加
+const { broadcastMessageUpdate } = require("../websocket/connection");
 
 exports.getMessagesByRoom = async (req, res) => { 
   try {
