@@ -57,47 +57,14 @@ app.use("/messages", messageRoutes);
 // /rooms/... → roomRoutes 内のエンドポイントが呼ばれる
 app.use("/rooms", roomRoutes);
 
-// ------------------------------------------------------------
-// HTTP サーバー作成（Express + WebSocket 共有）
-// ------------------------------------------------------------
+// WebSocket 初期化ファイル
+const { initWebSocket } = require("./websocket/connection");
+
+// Express を HTTP server に乗せる
 const server = http.createServer(app);
 
-// ------------------------------------------------------------
-// WebSocket サーバー作成
-// ------------------------------------------------------------
-const wss = new WebSocket.Server({ server });
-
-// すべての接続を管理
-let clients = [];
-
-// クライアント接続イベント
-wss.on("connection", (ws) => {
-  console.log("🔌 Client connected");
-  clients.push(ws);
-
-  ws.on("close", () => {
-    console.log("❌ Client disconnected");
-    clients = clients.filter(c => c !== ws);
-  });
-});
-
-// ------------------------------------------------------------
-// WebSocket でメッセージ更新を通知する関数
-// ------------------------------------------------------------
-function broadcastMessageUpdate(roomId) {
-  const payload = JSON.stringify({
-    type: "update",
-    roomId: roomId
-  });
-
-  clients.forEach(ws => {
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(payload);
-    }
-  });
-}
-// 他のファイルから呼び出せるように export
-module.exports.broadcastMessageUpdate = broadcastMessageUpdate;
+// WebSocket を初期化
+initWebSocket(server);
 
 // ------------------------------------------------------------
 // サーバーをポート3000で起動

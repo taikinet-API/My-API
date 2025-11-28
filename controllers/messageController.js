@@ -15,12 +15,13 @@ exports.getMessagesByRoom = async (req, res) => {
 
 exports.sendMessage = async (req, res) => {
   try {
-    const { roomId, userId, text } = req.body;
+    const roomId = req.params.roomId;
+    const { userId, text } = req.body;
     await Message.insert(roomId, userId, text);
 
     // WebSocket に通知（同じ部屋のユーザーへ）
     broadcastMessageUpdate(roomId);
-    
+
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: "server error" });
