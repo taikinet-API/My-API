@@ -1,6 +1,6 @@
 // controllers/messageController.js
 // messages/
-const Message = require("../models/Message");
+const Message = require("../models/Messages");
 const { broadcastMessageUpdate } = require("../app");   // ← 追加
 
 exports.getMessagesByRoom = async (req, res) => { 
